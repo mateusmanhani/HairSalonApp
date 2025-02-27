@@ -36,6 +36,6 @@ public class Service {
     }
 
     public void printService(){
-        System.out.println(this.serviceId + " ," + this.serviceName + " , $ " + this.servicePrice);
+        System.out.println(this.serviceId + ". " + this.serviceName + " , $ " + this.servicePrice);
     }
 }
