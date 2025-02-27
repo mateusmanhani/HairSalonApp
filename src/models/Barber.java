@@ -10,6 +10,7 @@ public class Barber {
     private Integer barberId;
     private String barberName;
     private List<TimeSlot> availability;
+    private List<Booking> bookings;
 
     public Barber(Integer barberId, String barberName) {
         this.barberId = barberId;
@@ -59,5 +60,22 @@ public class Barber {
 
     public void setAvailability(List<TimeSlot> availability) {
         this.availability = availability;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    // You can also add customer-specific methods here
+    public void addBooking(Booking booking) {
+        this.bookings.add(booking);
+    }
+
+    public void cancelBooking(Integer bookingId) {
+        bookings.removeIf(booking -> booking.getBookingId().equals(bookingId));
     }
 }

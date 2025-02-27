@@ -246,10 +246,11 @@ public class BookingController {
     private void createBooking(Service service, Barber barber, TimeSlot timeSlot){
         int bookingId = (int) (Math.random()*100);
         // Create a new booking
-        Booking newBooking = new Booking(bookingId,barber.getBarberId(),currentCustomer.getCustomerId(),timeSlot, service.getServicePrice());
+        Booking newBooking = new Booking(bookingId,barber.getBarberId(),currentCustomer.getUserId(),timeSlot, service.getServicePrice());
 
-        // Add booking to customer bookings
-        currentCustomer.getBookings().add(newBooking);
+        // Add booking to customer bookings and to barber bookings
+        currentCustomer.addBooking(newBooking);
+        barber.addBooking(newBooking);
 
         // Print booking details for confirmation
         System.out.println("\n=== Booking Confirmation ===");
