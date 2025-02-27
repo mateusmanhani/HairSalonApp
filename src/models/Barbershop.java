@@ -13,12 +13,22 @@ public class Barbershop {
         this.servicesProvided = servicesProvided;
     }
 
-    // populate barbershop with barbers and services
-
     // display services with id, name and price
+    public void displayServices(){
+        System.out.println("\n--- Services Available ---");
+        for(Service service : servicesProvided){
+            service.printService();
+        }
+    }
+
 
     // display Barbers with id and name
-
+    public void displayBarbers(){
+        System.out.println("\n--- Barbers Available ---");
+        for (Barber barber : barbers){
+            barber.printBarberInfo();
+        }
+    }
     public String getBusinessName() {
         return businessName;
     }
@@ -27,11 +37,11 @@ public class Barbershop {
         this.businessName = businessName;
     }
 
-    public List<Barber> getHairDressers() {
+    public List<Barber> getBarbers() {
         return barbers;
     }
 
-    public void setHairDressers(List<Barber> barbers) {
+    public void setBarbers(List<Barber> barbers) {
         this.barbers = barbers;
     }
 

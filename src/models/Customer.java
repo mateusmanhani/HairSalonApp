@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
@@ -9,12 +10,12 @@ public class Customer {
     private String password;
     private List<Booking> bookings;
 
-    public Customer(Integer customerId,String customerName, String username, String password, List<Booking> bookings) {
+    public Customer(Integer customerId,String customerName, String username, String password) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.username = username;
         this.password = password;
-        this.bookings = bookings;
+        this.bookings = new ArrayList<>();
     }
 
     public Integer getCustomerId() {

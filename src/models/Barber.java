@@ -2,6 +2,7 @@ package models;
 
 import util.TimeSlot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Barber {
@@ -13,6 +14,15 @@ public class Barber {
     public Barber(Integer barberId, String barberName) {
         this.barberId = barberId;
         this.barberName = barberName;
+        this.availability = new ArrayList<>();
+    }
+
+    // Print availability list
+    public void displaySlots(){
+        System.out.println("\n--- Time slots available ---");
+        for (TimeSlot slot : availability){
+            System.out.println(slot.getId() + ", " + slot.getTime());
+        }
     }
 
     // method to populate dummy availability
@@ -21,6 +31,10 @@ public class Barber {
         availability.add(TimeSlot.SLOT_2);
         availability.add(TimeSlot.SLOT_3);
         availability.add(TimeSlot.SLOT_4);
+    }
+
+    public void printBarberInfo(){
+        System.out.println(barberId + ", " + barberName);
     }
 
     public Integer getBarberId() {
