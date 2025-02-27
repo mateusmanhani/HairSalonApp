@@ -4,14 +4,15 @@ import util.TimeSlot;
 
 import java.util.List;
 
-public class Employee {
+public class Barber {
 
-    private String name;
+    private Integer barberId;
+    private String barberName;
     private List<TimeSlot> availability;
 
-
-    public Employee(String name){
-        this.name = name;
+    public Barber(Integer barberId, String barberName) {
+        this.barberId = barberId;
+        this.barberName = barberName;
     }
 
     // method to populate dummy availability
@@ -22,12 +23,20 @@ public class Employee {
         availability.add(TimeSlot.SLOT_4);
     }
 
-    public void setName(String name){
-        this.name=name;
+    public Integer getBarberId() {
+        return barberId;
     }
 
-    public String getName(){
-        return name;
+    public void setBarberId(Integer barberId) {
+        this.barberId = barberId;
+    }
+
+    public void setBarberName(String barberName){
+        this.barberName = barberName;
+    }
+
+    public String getBarberName(){
+        return barberName;
     }
 
     public List<TimeSlot> getAvailability() {

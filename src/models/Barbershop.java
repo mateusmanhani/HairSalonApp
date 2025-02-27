@@ -4,16 +4,16 @@ import java.util.List;
 
 public class Barbershop {
     private String businessName;
-    private List<Employee> employees;
+    private List<Barber> barbers;
     private List<Service> servicesProvided;
 
-    public Barbershop(String businessName, List<Employee> employees, List<Service> servicesProvided) {
+    public Barbershop(String businessName, List<Barber> barbers, List<Service> servicesProvided) {
         this.businessName = businessName;
-        this.employees = employees;
+        this.barbers = barbers;
         this.servicesProvided = servicesProvided;
     }
 
-    // populate barbershop with employees and services
+    // populate barbershop with barbers and services
 
     // display services with id, name and price
 
@@ -27,12 +27,12 @@ public class Barbershop {
         this.businessName = businessName;
     }
 
-    public List<Employee> getHairDressers() {
-        return employees;
+    public List<Barber> getHairDressers() {
+        return barbers;
     }
 
-    public void setHairDressers(List<Employee> employees) {
-        this.employees = employees;
+    public void setHairDressers(List<Barber> barbers) {
+        this.barbers = barbers;
     }
 
     public List<Service> getServicesProvided() {
