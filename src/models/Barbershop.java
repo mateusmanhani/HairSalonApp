@@ -2,6 +2,7 @@ package models;
 
 import util.TimeSlot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Barbershop {
@@ -9,10 +10,10 @@ public class Barbershop {
     private List<Barber> barbers;
     private List<Service> servicesProvided;
 
-    public Barbershop(String businessName, List<Barber> barbers, List<Service> servicesProvided) {
+    public Barbershop(String businessName) {
         this.businessName = businessName;
-        this.barbers = barbers;
-        this.servicesProvided = servicesProvided;
+        this.barbers = new ArrayList<>();
+        this.servicesProvided =  new ArrayList<>();
     }
 
     // display services with id, name and price
@@ -25,10 +26,14 @@ public class Barbershop {
 
 
     // display Barbers with id and name
-    public void displayBarbers(){
+    public void displayBarbers() {
         System.out.println("\n--- Barbers Available ---");
-        for (Barber barber : barbers){
-            barber.printBarberInfo();
+        for (Barber barber : barbers) {
+            if (barber == null) {
+                System.out.println("Null barber found!"); // Debug statement
+            } else {
+                barber.printBarberInfo();
+            }
         }
     }
     public String getBusinessName() {
@@ -58,7 +63,7 @@ public class Barbershop {
     // Helper method to find a barber by ID
     private Barber findBarberById(int barberId) {
         for (Barber barber : barbers) {
-            if (barber.getBarberId() == barberId) {
+            if (barber.getUserId() == barberId) {
                 return barber;
             }
         }

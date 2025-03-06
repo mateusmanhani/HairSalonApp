@@ -2,15 +2,13 @@ package controller;
 
 import models.*;
 import util.DummyPopulator;
-import util.CustomerRepository;
+import util.UserRepository;
 import util.TimeSlot;
 import util.UserInterface;
 
-import java.util.Scanner;
-
 public class BookingController {
     private final DummyPopulator dm = new DummyPopulator();
-    private final CustomerRepository customerRepository = new CustomerRepository();
+    private final UserRepository userRepository = new UserRepository();
     private final Barbershop barbershop = dm.createBarbershop(); // Create Barbershop with services and barbers already assigned
     private final UserInterface ui = new UserInterface();
     private Customer currentCustomer = null;
@@ -108,8 +106,8 @@ public class BookingController {
 
                 int barberId = Integer.parseInt(choice);
                 for (Barber barber: barbershop.getBarbers()){
-                    if (barber.getBarberId() == barberId){
-                        System.out.println("Selected Barber: " +barber.getBarberName());
+                    if (barber.getUserId() == barberId){
+                        System.out.println("Selected Barber: " +barber.getUserId());
                         return barber;
                     }
                 }
@@ -148,7 +146,7 @@ public class BookingController {
         String username = ui.getUserInput("\nEnter your username without spaces: ");
         String password = ui.getUserInput("\nEnter password: ");
 
-        Customer authenticatedCustomer = authenticateCustomer(username,password);
+        Customer authenticatedCustomer = userRepository.authenticateCustomer(username,password);
 
         if(authenticatedCustomer == null){
             System.out.println("Login Unsuccessful.");
@@ -174,40 +172,12 @@ public class BookingController {
         }
 
         // Attempt to register user
-        boolean registered = registerCustomer(username,password,fulName);
+        boolean registered = userRepository.registerCustomer(username,password,fulName);
 
         if (registered) {
             System.out.println("\nRegistration successful! Please login to continue.");
         } else {
             System.out.println("\nRegistration failed. Username already exists.");
-        }
-    }
-
-    // User sign up
-    public boolean registerCustomer(String username, String password, String fullName){
-            Customer customer = customerRepository.findByUsername(username);
-            if (customer == null){
-                int newCustomerId = (int) (Math.random()*100);
-                Customer newCustomer = new Customer(newCustomerId,fullName,username,password);
-                customerRepository.addCustomer(newCustomer);
-                return true;
-            }else {
-                return false;
-            }
-    }
-
-    // User login
-    public Customer authenticateCustomer(String username, String password) {
-        Customer customer = customerRepository.findByUsername(username);
-        if (customer == null) {
-            System.out.println("Customer not found with username: " + username);
-            return null;
-        }
-
-        if (customer.getPassword().equals(password)) {
-            return customer; // Return the customer if authentication is successful
-        } else {
-            return null; // Return null if password doesn't match
         }
     }
 
@@ -230,7 +200,7 @@ public class BookingController {
         int bookingId = (int) (Math.random()*100);
         // Create a new booking
         Booking newBooking = barbershop.createBooking(
-                bookingId,barber.getBarberId(),
+                bookingId,barber.getUserId(),
                 currentCustomer.getUserId(),
                 timeSlot,
                 service.getServicePrice());
@@ -242,7 +212,7 @@ public class BookingController {
         System.out.println("\n=== Booking Confirmation ===");
         System.out.println("Booking ID: " + bookingId);
         System.out.println("Service: " + service.getServiceName());
-        System.out.println("Barber: " + barber.getBarberName());
+        System.out.println("Barber: " + barber.getUserId());
         System.out.println("Time: " + timeSlot.getTime());
         System.out.println("Price: $" + service.getServicePrice());
         System.out.println("Thank you for your booking!");

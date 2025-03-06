@@ -11,7 +11,7 @@ import java.util.List;
 public class DummyPopulator {
 
     public Barbershop createBarbershop() {
-        Barbershop barbershop = new Barbershop("HairStudio", new ArrayList<>(), new ArrayList<>());
+        Barbershop barbershop = new Barbershop("HairStudio");
 
         // Create barbers
         String[] barberNames = {"John", "Jack", "Luke", "Aoife", "Peter"};
@@ -30,4 +30,5 @@ public class DummyPopulator {
 
         return barbershop;
     }
+
 }

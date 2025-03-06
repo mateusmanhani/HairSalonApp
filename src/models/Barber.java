@@ -7,8 +7,6 @@ import java.util.List;
 
 public class Barber extends User {
 
-    private Integer barberId;
-    private String barberName;
     private List<TimeSlot> availability;
     private List<Booking> bookings;
 
@@ -20,6 +18,8 @@ public class Barber extends User {
 
     public Barber (Integer barberId, String barberName){
         super(barberId,barberName);
+        this.availability = new ArrayList<>();
+        this.bookings = new ArrayList<>();
     }
 
     // Print availability list
@@ -39,23 +39,7 @@ public class Barber extends User {
     }
 
     public void printBarberInfo(){
-        System.out.println(barberId + ", " + barberName);
-    }
-
-    public Integer getBarberId() {
-        return barberId;
-    }
-
-    public void setBarberId(Integer barberId) {
-        this.barberId = barberId;
-    }
-
-    public void setBarberName(String barberName){
-        this.barberName = barberName;
-    }
-
-    public String getBarberName(){
-        return barberName;
+        System.out.println(getUserId() + ", " + getFullName());
     }
 
     public List<TimeSlot> getAvailability() {
