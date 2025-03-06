@@ -13,6 +13,10 @@ public class User {
         this.password = password;
     }
 
+    public User (Integer userId, String fullName){
+        this.userId = userId;
+        this. fullName = fullName;
+    }
     // Getters and setters
     public Integer getUserId() {
         return userId;

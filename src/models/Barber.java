@@ -5,17 +5,21 @@ import util.TimeSlot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Barber {
+public class Barber extends User {
 
     private Integer barberId;
     private String barberName;
     private List<TimeSlot> availability;
     private List<Booking> bookings;
 
-    public Barber(Integer barberId, String barberName) {
-        this.barberId = barberId;
-        this.barberName = barberName;
+    public Barber(Integer barberId, String barberName, String username, String password) {
+        super(barberId, barberName, username, password); // Call user constructor
         this.availability = new ArrayList<>();
+        this.bookings = new ArrayList<>();
+    }
+
+    public Barber (Integer barberId, String barberName){
+        super(barberId,barberName);
     }
 
     // Print availability list

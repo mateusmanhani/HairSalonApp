@@ -10,60 +10,24 @@ import java.util.List;
 
 public class DummyPopulator {
 
-    public Barbershop createBarbershop(){
-        List<Barber> barbers = createBarberList();
-        List<Service> services = createServicesList();
+    public Barbershop createBarbershop() {
+        Barbershop barbershop = new Barbershop("HairStudio", new ArrayList<>(), new ArrayList<>());
 
-        return new Barbershop("HairStudio", barbers, services);
-
-    }
-
-    public List<Barber> createBarberList(){
-        //  Create List of Barber objects
-        List<Barber> barberList = new ArrayList<>();
-
-        // String array with names for the barbers
-        String[] names = {"John", "Jack", "Luke", "Aoife", "Peter"};
-
-        int[] ids = {1,2,3,4,5};
-
-        int nameIndex = 0;
-
-        for( int id : ids){
-            Barber newBarber = new Barber(id,names[nameIndex]);
-            newBarber.populateAvl(); // populate list of available times for this barber
-            barberList.add(newBarber); // Add barber to barber list
-            nameIndex++; // move to the next name
+        // Create barbers
+        String[] barberNames = {"John", "Jack", "Luke", "Aoife", "Peter"};
+        int[] barberIds = {1, 2, 3, 4, 5};
+        for (int i = 0; i < barberIds.length; i++) {
+            barbershop.createBarber(barberIds[i], barberNames[i]);
         }
 
-        return barberList;
-    }
-
-    public List<Service> createServicesList(){
-        // Create list of Service objects
-        List<Service> serviceList = new ArrayList<>();
-
-        // Create array of service names
-        String[] serviceNames = {"Haircut","Beard Trim","Hot Towel Shave","Eyebrows","Highlights"};
-
-        // Create array of service prices
+        // Create services
+        String[] serviceNames = {"Haircut", "Beard Trim", "Hot Towel Shave", "Eyebrows", "Highlights"};
         double[] servicePrices = {25.0, 15.0, 20.0, 10.0, 50.0};
-
-        int [] ids = {1,2,3,4,5};
-
-        int nameIndex = 0;
-        int priceIndex = 0;
-
-
-        for(int id : ids){
-            Service newService = new Service(id,serviceNames[nameIndex], servicePrices[priceIndex]);
-            serviceList.add(newService);
-            nameIndex++;
-            priceIndex++;
+        int[] serviceIds = {1, 2, 3, 4, 5};
+        for (int i = 0; i < serviceIds.length; i++) {
+            barbershop.createService(serviceIds[i], serviceNames[i], servicePrices[i]);
         }
 
-        return serviceList;
-
-
+        return barbershop;
     }
 }
