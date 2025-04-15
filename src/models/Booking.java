@@ -5,14 +5,16 @@ import util.TimeSlot;
 public class Booking {
 
     private Integer bookingId;
-    private Integer employeeId;
+    private Integer barberId;
     private Integer customerId;
+    private Integer serviceId;
     private TimeSlot timeSlot;
     private double bookingPrice;
 
-    public Booking(Integer bookingId, Integer employeeId, Integer customerId, TimeSlot timeSlot, double bookingPrice) {
+    public Booking(Integer bookingId, Integer barberId, Integer serviceId, Integer customerId, TimeSlot timeSlot, double bookingPrice) {
         this.bookingId = bookingId;
-        this.employeeId = employeeId;
+        this.barberId = barberId;
+        this.serviceId = serviceId;
         this.customerId = customerId;
         this.timeSlot = timeSlot;
         this.bookingPrice = bookingPrice;
@@ -26,12 +28,12 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Integer getEmployeeId() {
-        return employeeId;
+    public Integer getBarberId() {
+        return barberId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
+    public void setBarberId(Integer barberId) {
+        this.barberId = barberId;
     }
 
     public Integer getCustomerId() {
@@ -56,6 +58,14 @@ public class Booking {
 
     public void setBookingPrice(double bookingPrice) {
         this.bookingPrice = bookingPrice;
+    }
+
+    public Integer getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Integer serviceId) {
+        this.serviceId = serviceId;
     }
 }
 

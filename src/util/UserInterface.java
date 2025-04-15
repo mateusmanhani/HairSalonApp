@@ -16,6 +16,15 @@ public class UserInterface {
         System.out.println("=================================");
     }
 
+    public void displayCustomerMenu() {
+        System.out.println("\n=== Customer Menu ===");
+        System.out.println("1. Make a new booking");
+        System.out.println("2. View my bookings");
+        System.out.println("3. Cancel a booking");
+        System.out.println("4. Modify a booking");
+        System.out.println("Type 'back' to return to main menu");
+    }
+
     public String getUserInput(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();

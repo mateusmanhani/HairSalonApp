@@ -1,12 +1,7 @@
 package util;
 
-import models.Barber;
 import models.Barbershop;
-import models.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class DummyPopulator {
 

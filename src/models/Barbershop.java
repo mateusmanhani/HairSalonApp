@@ -61,10 +61,20 @@ public class Barbershop {
     }
 
     // Helper method to find a barber by ID
-    private Barber findBarberById(int barberId) {
+    public Barber findBarberById(int barberId) {
         for (Barber barber : barbers) {
             if (barber.getUserId() == barberId) {
                 return barber;
+            }
+        }
+        return null;
+    }
+
+    // Helper method to find service by id
+    public Service findServiceById(int serviceId){
+        for (Service service : servicesProvided){
+            if (service.getServiceId() == serviceId){
+                return service;
             }
         }
         return null;
@@ -86,13 +96,23 @@ public class Barbershop {
     }
 
     // Create a new booking
-    public Booking createBooking(int bookingId, int barberId, int customerId, TimeSlot timeSlot, double price) {
-        Booking booking = new Booking(bookingId, barberId, customerId, timeSlot, price);
-        // Add booking to the respective barber and customer
+    public Booking createBooking(int bookingId, int barberId,int serviceId, int customerId, TimeSlot timeSlot, double price) {
+        // Find barber or return null
         Barber barber = findBarberById(barberId);
-        if (barber != null) {
-            barber.addBooking(booking);
-        }
+        if (barber == null) return null; // barber with id doesn't exist
+
+        // Check if timeslot is still available
+        if (!barber.getAvailability().contains(timeSlot)) return null; // timeslot is not available
+
+        // Create booking
+        Booking booking = new Booking(bookingId, barberId,serviceId, customerId, timeSlot, price);
+
+        // Add booking to the respective barber
+        barber.addBooking(booking);
+
+        //remove timeslot from the barber's availability list
+        barber.getAvailability().remove(timeSlot);
+
         return booking;
     }
 

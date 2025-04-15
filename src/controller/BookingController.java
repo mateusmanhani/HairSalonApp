@@ -6,6 +6,8 @@ import util.UserRepository;
 import util.TimeSlot;
 import util.UserInterface;
 
+import java.util.List;
+
 public class BookingController {
     private final DummyPopulator dm = new DummyPopulator();
     private final UserRepository userRepository = new UserRepository();
@@ -38,7 +40,7 @@ public class BookingController {
         switch (choice) {
             case 1:
                 if (handleLogin()) {
-                    handleBookingProcess();
+                    handleCustomerMenu();
                 }
                 break;
             case 2:
@@ -47,6 +49,174 @@ public class BookingController {
             default:
                 ui.displayMessage("\nInvalid option. Please try again.");
         }
+    }
+
+    private void handleCustomerMenu() {
+        while (true) {
+            ui.displayCustomerMenu();
+            String choice = ui.getUserInput("\nEnter your choice: ");
+
+            if (choice.equalsIgnoreCase("back")) {
+                return;
+            }
+
+            try {
+                switch (Integer.parseInt(choice)) {
+                    case 1:
+                        handleBookingProcess();
+                        break;
+                    case 2:
+                        viewMyBookings();
+                        break;
+                    case 3:
+                        cancelBooking();
+                        break;
+                    case 4:
+                        modifyBooking();
+                        break;
+                    default:
+                        ui.displayMessage("Invalid option. Please try again.");
+                }
+            } catch (NumberFormatException e) {
+                ui.displayMessage("Please enter a valid number.");
+            }
+        }
+    }
+
+    // Display user bookings
+    public void viewMyBookings() {
+        if (currentCustomer == null) {
+            ui.displayMessage("Please login first.");
+            return;
+        }
+
+        List<Booking> bookings = currentCustomer.getBookings();
+        if (bookings.isEmpty()) {
+            ui.displayMessage("You have no bookings.");
+            return;
+        }
+
+        ui.displayMessage("\n=== Your Bookings ===");
+        for (Booking booking : bookings) {
+            displayBookingDetails(booking);
+        }
+    }
+
+    private void displayBookingDetails(Booking booking) {
+        Barber barber = barbershop.findBarberById(booking.getBarberId());
+        Service service = barbershop.findServiceById(booking.getServiceId());
+
+        ui.displayMessage("\nBooking ID: " + booking.getBookingId());
+        ui.displayMessage("Service: " + (service != null ? service.getServiceName() : "Unknown"));
+        ui.displayMessage("Barber: " + (barber != null ? barber.getFullName() : "Unknown"));
+        ui.displayMessage("Time: " + booking.getTimeSlot().getTime());
+        ui.displayMessage("Price: $" + booking.getBookingPrice());
+    }
+
+        public void cancelBooking() {
+        if (currentCustomer == null) {
+            ui.displayMessage("Please login first.");
+            return;
+        }
+
+        List<Booking> bookings = currentCustomer.getBookings();
+        if (bookings.isEmpty()) {
+            ui.displayMessage("You have no bookings to cancel.");
+            return;
+        }
+
+        viewMyBookings();
+        int bookingId = Integer.parseInt(ui.getUserInput("Enter booking ID to cancel: "));
+
+        Booking bookingToCancel = null;
+        for (Booking booking : bookings) {
+            if (booking.getBookingId() == bookingId) {
+                bookingToCancel = booking;
+                break;
+            }
+        }
+
+        if (bookingToCancel != null) {
+            // Remove from customer
+            currentCustomer.cancelBooking(bookingId);
+
+            // Remove from barber
+            Barber barber = barbershop.findBarberById(bookingToCancel.getBarberId());
+            if (barber != null) {
+                barber.cancelBooking(bookingId);
+            }
+
+            // Free up the timeslot
+            TimeSlot slot = bookingToCancel.getTimeSlot();
+            barber.getAvailability().add(slot);
+
+            ui.displayMessage("Booking cancelled successfully.");
+        } else {
+            ui.displayMessage("Invalid booking ID.");
+        }
+    }
+
+    public void modifyBooking() {
+        if (currentCustomer == null) {
+            ui.displayMessage("Please login first.");
+            return;
+        }
+
+        List<Booking> bookings = currentCustomer.getBookings();
+        if (bookings.isEmpty()) {
+            ui.displayMessage("You have no bookings to modify.");
+            return;
+        }
+
+        viewMyBookings();
+        int bookingId = Integer.parseInt(ui.getUserInput("Enter booking ID to modify: "));
+
+        Booking bookingToModify = null;
+        for (Booking booking : bookings) {
+            if (booking.getBookingId() == bookingId) {
+                bookingToModify = booking;
+                break;
+            }
+        }
+
+        if (bookingToModify == null) {
+            ui.displayMessage("Invalid booking ID.");
+            return;
+        }
+
+        // Free up the old timeslot
+        Barber oldBarber = barbershop.findBarberById(bookingToModify.getBarberId());
+        if (oldBarber != null) {
+            oldBarber.getAvailability().add(bookingToModify.getTimeSlot());
+        }
+
+        // Get new booking details
+        Service newService = handleServiceSelection();
+        if (newService == null) return;
+
+        Barber newBarber = handleBarberSelection();
+        if (newBarber == null) return;
+
+        TimeSlot newTimeSlot = handleTimeSlotSelection(newBarber);
+        if (newTimeSlot == null) return;
+
+        // Update the existing booking
+        bookingToModify.setBarberId(newBarber.getUserId());
+        bookingToModify.setServiceId(newService.getServiceId());
+        bookingToModify.setTimeSlot(newTimeSlot);
+        bookingToModify.setBookingPrice(newService.getServicePrice());
+
+        // Remove the new timeslot from availability
+        newBarber.getAvailability().remove(newTimeSlot);
+
+        // Update in barber's bookings
+        if (oldBarber != null && !oldBarber.equals(newBarber)) {
+            oldBarber.cancelBooking(bookingId);
+            newBarber.addBooking(bookingToModify);
+        }
+
+        ui.displayMessage("\nBooking updated successfully!");
+        displayBookingDetails(bookingToModify);
     }
 
     // Handle booking process
@@ -200,7 +370,9 @@ public class BookingController {
         int bookingId = (int) (Math.random()*100);
         // Create a new booking
         Booking newBooking = barbershop.createBooking(
-                bookingId,barber.getUserId(),
+                bookingId,
+                barber.getUserId(),
+                service.getServiceId(),
                 currentCustomer.getUserId(),
                 timeSlot,
                 service.getServicePrice());
@@ -210,12 +382,7 @@ public class BookingController {
 
         // Print booking details for confirmation
         System.out.println("\n=== Booking Confirmation ===");
-        System.out.println("Booking ID: " + bookingId);
-        System.out.println("Service: " + service.getServiceName());
-        System.out.println("Barber: " + barber.getUserId());
-        System.out.println("Time: " + timeSlot.getTime());
-        System.out.println("Price: $" + service.getServicePrice());
-        System.out.println("Thank you for your booking!");
+        displayBookingDetails(newBooking);
     }
     
 }
